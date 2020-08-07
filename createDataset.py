@@ -1,6 +1,7 @@
 import random
-
 import pandas
+import argparse
+from tqdm import tqdm
 
 """
 TODO: 生成数据集包含 Train Test Validate (比例 6：2：2)
@@ -61,31 +62,36 @@ def writeCSV(list, name):
 
 
 if __name__ == '__main__':
-    image_path = '/Users/mickey/document/Master of computer science/Project/data/orthopedics/trimed_png_list.txt'
-    path_file = readFile(image_path, 2)
-    csv_file_path = '/Users/mickey/document/Master of computer science/Project/data/orthopedics/label.csv'
-    csv_file = readFile(csv_file_path, 1)
-    positive_set = list()
-    negative_set = list()
-    labelSet = csv_file.get('label')
-    for i, v in labelSet.items():
-        if v == 1:
-            positive_set.append(csv_file.get('patient_id')[i])
-        else:
-            negative_set.append(csv_file.get('patient_id')[i])
-    # 6 : 2 : 2 random shuffle
-    random.seed(2)
-    random.shuffle(positive_set)
-    random.shuffle(negative_set)
-    divided_positive_set = dividedIntoThreeGroups(positive_set)
-    divided_negative_set = dividedIntoThreeGroups(negative_set)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--image_path', type=str, required=True)
+    parser.add_argument('-c', '--csv_file_path', type=str, required=True)
+    args = parser.parse_args()
+    image_path = args.image_path
+    csv_file_path = args.csv_file_path
+    # image_path = '/Users/mickey/document/Master of computer science/Project/data/orthopedics/trimed_png_list.txt'
+    # csv_file_path = '/Users/mickey/document/Master of computer science/Project/data/orthopedics/label.csv'
+    for i in tqdm(range(1)):
+        path_file = readFile(image_path, 2)
+        csv_file = readFile(csv_file_path, 1)
+        positive_set = list()
+        negative_set = list()
+        labelSet = csv_file.get('label')
+        for i, v in labelSet.items():
+            if v == 1:
+                positive_set.append(csv_file.get('patient_id')[i])
+            else:
+                negative_set.append(csv_file.get('patient_id')[i])
+        # 6 : 2 : 2 random shuffle
+        random.seed(2)
+        random.shuffle(positive_set)
+        random.shuffle(negative_set)
+        divided_positive_set = dividedIntoThreeGroups(positive_set)
+        divided_negative_set = dividedIntoThreeGroups(negative_set)
 
-    trainedList = getList(divided_positive_set[0], path_file, 1) + getList(divided_negative_set[0], path_file, 0)
-    testList = getList(divided_positive_set[1], path_file, 1) + getList(divided_negative_set[1], path_file, 0)
-    validateList = getList(divided_positive_set[2], path_file, 1) + getList(divided_negative_set[2], path_file, 0)
+        trainedList = getList(divided_positive_set[0], path_file, 1) + getList(divided_negative_set[0], path_file, 0)
+        testList = getList(divided_positive_set[1], path_file, 1) + getList(divided_negative_set[1], path_file, 0)
+        validateList = getList(divided_positive_set[2], path_file, 1) + getList(divided_negative_set[2], path_file, 0)
 
-    writeCSV(trainedList, "trainedList")
-    writeCSV(testList, "testList")
-    writeCSV(validateList, "validateList")
-
-    pass
+        writeCSV(trainedList, "trainedList")
+        writeCSV(testList, "testList")
+        writeCSV(validateList, "validateList")
