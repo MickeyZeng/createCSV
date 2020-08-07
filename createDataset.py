@@ -1,6 +1,7 @@
-import random
-import pandas
 import argparse
+import random
+
+import pandas
 from tqdm import tqdm
 
 """
@@ -95,3 +96,13 @@ if __name__ == '__main__':
         writeCSV(trainedList, "trainedList")
         writeCSV(testList, "testList")
         writeCSV(validateList, "validateList")
+
+        for i in trainedList:
+            i.update({'set': 'train'})
+        for i in testList:
+            i.update({'set': 'test'})
+        for i in validateList:
+            i.update({'set': 'validate'})
+
+        wholeList = trainedList + testList + validateList
+        writeCSV(wholeList, "wholeList")
