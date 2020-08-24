@@ -1,4 +1,5 @@
 import pandas
+import numpy as np
 
 """
 TODO: 生成数据集包含 Train Test Validate (比例 6：2：2)
@@ -57,6 +58,7 @@ def writeCSV(list, name):
     dataframe.to_csv("output/" + name + ".csv", index=False, sep=',')
     pass
 
+
 """
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -104,6 +106,8 @@ if __name__ == '__main__':
         writeCSV(wholeList, "wholeList")
 """
 
+from PIL import Image
+
 if __name__ == '__main__':
     path = "/Users/mickey/document/Master of computer science/Project/cifar10/master_with_prediction_1.0.csv"
     master = pandas.read_csv(path)
@@ -117,5 +121,17 @@ if __name__ == '__main__':
     for i in da:
         if i['to_label'] == 'Yes':
             resultList.append(i)
+    #
+    # writeCSV(resultList, 'yes_csv')
 
-    writeCSV(resultList, 'yes_csv')
+    # testImg = np.load("/Users/mickey/document/Master of computer science/Project/cifar10/data.npy")
+    # useImg = pandas.read_csv("output/yes_csv.csv")
+    #
+    # print(len(testImg))
+    #
+    # imgIndex = useImg['image_index'].to_list()
+    #
+    # for i in imgIndex:
+    #     tempImg = testImg[int(i)]
+    #     im = Image.fromarray(tempImg)
+    #     im.save("resultImg/" + str(i) + ".png")
