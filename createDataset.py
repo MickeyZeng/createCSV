@@ -1,8 +1,4 @@
-import argparse
-import random
-
 import pandas
-from tqdm import tqdm
 
 """
 TODO: 生成数据集包含 Train Test Validate (比例 6：2：2)
@@ -61,7 +57,7 @@ def writeCSV(list, name):
     dataframe.to_csv("output/" + name + ".csv", index=False, sep=',')
     pass
 
-
+"""
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--image_path', type=str, required=True)
@@ -106,3 +102,20 @@ if __name__ == '__main__':
 
         wholeList = trainedList + testList + validateList
         writeCSV(wholeList, "wholeList")
+"""
+
+if __name__ == '__main__':
+    path = "/Users/mickey/document/Master of computer science/Project/cifar10/master_with_prediction_1.0.csv"
+    master = pandas.read_csv(path)
+
+    # print(len(master))
+
+    resultList = []
+
+    da = master.to_dict(orient='records')
+
+    for i in da:
+        if i['to_label'] == 'Yes':
+            resultList.append(i)
+
+    writeCSV(resultList, 'yes_csv')
